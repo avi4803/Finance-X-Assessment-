@@ -67,4 +67,106 @@ Instead of just showing raw data, the backend provides pre-calculated analysis:
 *   ✅ **Unit Tests**: Mathematical verification of core financial logic via **Vitest**.
 
 ---
-**Build Status: STABLE** // **Architecture: LAYERED** // 🚀💎🛡️🏁🏆
+
+## **📖 Detailed API Reference (Usage Guide)**
+
+Every internal system interaction is documented below with **JSON request** and **JSON response** samples for immediate testing.
+
+### **1. Authentication Gateway** 🔐
+Used to initialize an operative session and receive a secure JWT bearer token.
+
+**`POST /auth/login`** (Public)
+*   **Request Payload**:
+    ```json
+    {
+      "email": "admin@financex.core",
+      "password": "secure_hash_2026"
+    }
+    ```
+*   **Success Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "data": {
+        "token": "eyJhbGciOiJIUzI1NiJ9...",
+        "user": { "id": "uuid-1", "role": "ADMIN", "name": "Lead Operative" }
+      }
+    }
+    ```
+
+---
+
+### **2. Financial Ledger (Records)** 🔎
+Used to manage income and expenses. Access varies (VIEWER: Read-Only | ADMIN: Full Control).
+
+**`GET /transactions`** (All Roles)
+*   **Query Params**: `?category=INFRASTRUCTURE&limit=10`
+*   **Success Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "data": [
+        {
+          "id": "tx-101",
+          "amount": 250.00,
+          "type": "EXPENSE",
+          "category": "UTILITIES",
+          "date": "2026-04-01T10:00:00Z"
+        }
+      ]
+    }
+    ```
+
+**`POST /transactions`** (ADMIN / ANALYST Only)
+*   **Request Payload**:
+    ```json
+    {
+      "amount": 1500.00,
+      "type": "INCOME",
+      "category": "SALARY",
+      "notes": "Q1 Project Bonus"
+    }
+    ```
+
+---
+
+### **3. Intelligence Summary (Analytics)** 📈
+Calculates and returns high-level summary metadata for the dashboard.
+
+**`GET /dashboard/analytics`** (All Roles)
+*   **Success Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "data": {
+        "summary": {
+          "totalIncome": 15000,
+          "totalExpense": 8000,
+          "netBalance": 7000
+        },
+        "distribution": {
+          "expense": [{ "category": "INFRASTRUCTURE", "amount": 4000 }]
+        }
+      }
+    }
+    ```
+
+---
+
+### **4. Governance Nexus (Admin Controls)** 🛡️
+Used by the **Lead Admin** to manage operatives and view security audit trails.
+
+**`GET /users`** (ADMIN ONLY)
+*   **Response**: Returns the registry of all accounts and their current authority levels.
+
+**`PATCH /users/:id`** (ADMIN ONLY)
+*   **Request Payload**: Change a user's role or access status instantly.
+    ```json
+    {
+      "role": "ANALYST",
+      "status": "INACTIVE"
+    }
+    ```
+
+---
+**FinanceX v1.5.0** // SECURE_MAIN_TUNNEL: ACTIVE // 🚀💎🛡️🏁🏆
