@@ -1,136 +1,70 @@
-# 🏛️ FinanceX: Enterprise Intelligence Dashboard
+# 🏛️ FinanceX Dashboard: Data Processing & Access Control
 
-**FinanceX** is a high-performance, portfolio-grade financial monitoring ecosystem. It integrates a secure, throttled **Node.js/TypeScript API** with a stunning **Next.js 15 Command Center** to provide real-time transactional telemetry, automated analytical insights, and immutable governance logs.
-
----
-
-## **🚀 Core Mission Systems**
-
-1.  **🛡️ Command Center (Unified Analytics)**: Consolidation of total liquidity, revenue flow, and expense distribution into a single, high-speed dashboard. (Replaces the legacy 'Insights' tab).
-2.  **📋 Ledger Registry (Transactions)**: Full-spectrum transactional management with **Soft-Data Retention** and **Zod Validation**.
-3.  **📈 Intelligence Pulse**: Real-time 10-point liquidity trend tracking and volume index aggregation via DB-level grouping.
-4.  **⚖️ Governance Nexus (Admin Hub)**: Complete RBAC (Role-Based Access Control) management, account activation/deactivation, and an immutable security audit trail.
+This project is a high-quality, professional-grade backend and frontend ecosystem built to solve the **Finance Data Processing Assignment**. It focuses on the secure management of financial records, role-based governance, and real-time analytical summaries.
 
 ---
 
-## **🛠️ The Tech Stack**
-
-### **Frontend Architecture**
-- **Framework**: Next.js 15 (App Router) + TypeScript
-- **Styling**: Tailwind CSS v4 + Shadcn UI (Custom Midnight Theme)
-- **State & Fetching**: TanStack Query (React Query)
-- **Motion**: Framer Motion for UI/UX transitions
-- **Visualization**: Recharts (Custom SVG-rendered telemetry)
-
-### **Backend Mainframe**
-- **Engine**: Node.js v22 + Express
-- **ORM**: Prisma (PostgreSQL / SQLite ready)
-- **Security**: JWT (jsonwebtoken), Bcryptjs, Helmet, Express-Rate-Limit
-- **Logging**: Morgan + Custom Audit Transaction Logger
+## **🎯 Project Objective**
+To build a reliable, logically organized system that manages financial transactions while strictly enforcing user permissions. This implementation demonstrates clean architecture, robust data validation, and meaningful analytical insights.
 
 ---
 
-## **📖 API Reference & Documentation**
+## **✨ Key Features (Assignment Requirements)**
 
-All API endpoints are prefixed with `/api/v1`. 
+### **1. 🛡️ User & Role Management (RBAC)**
+I have implemented a tiered authority system to control exactly what a user can see and do:
+*   **ADMIN**: Full management access (Users, Transactions, Audit Logs).
+*   **ANALYST**: Strategic access. Can view summaries and edit/create records but cannot delete them.
+*   **VIEWER**: Read-only access to the dashboard and ledger.
+*   **Status Control**: Admins can toggle any user between `ACTIVE` and `INACTIVE` to instantly revoke system access.
 
-### **1. Authentication Gateway** 🔐
-| Method | Endpoint | Access | Purpose |
-| :--- | :--- | :--- | :--- |
-| **POST** | `/auth/login` | Public | Authenticate operative and receive JWT |
-| **POST** | `/auth/register` | Public | Onboard new identity (Default: VIEWER) |
+### **2. 📋 Financial Records Management (The Ledger)**
+A complete engine for financial entries with support for:
+*   **Detailed Records**: Amount, Type (Income/Expense), Category, Date, and Notes.
+*   **Smart Filtering**: Query records by date range, category, or type.
+*   **Soft Delete**: Transactions are never truly lost. They are "Soft Deleted" to maintain an audit trail while being removed from the active dashboard.
 
-**Sample Login Request:**
-```json
-{
-  "email": "admin@financex.core",
-  "password": "secure_hash_2026"
-}
-```
-**Sample Login Response (200 OK):**
-```json
-{
-  "success": true,
-  "data": {
-    "token": "eyJhbGciOiJIUzI1Ni...",
-    "user": { "id": "uuid-1", "role": "ADMIN", "name": "Lead Admin" }
-  }
-}
-```
+### **3. 📊 Dashboard Summary (Intelligence)**
+Instead of just showing raw data, the backend provides pre-calculated analysis:
+*   **Net Liquidity**: Real-time calculation of Income vs. Expenses.
+*   **Volume Index**: Category-wise distribution of spending.
+*   **Trend Pulse**: A rolling 10-point liquidity flow chart showing balance movements.
 
-### **2. Financial Ledger (Records)** 🔎
-| Method | Endpoint | Access | Purpose |
-| :--- | :--- | :--- | :--- |
-| **GET** | `/transactions` | All | Fetch paginated/filtered transaction logs |
-| **POST** | `/transactions` | ADMIN / ANALYST | Record new financial movement |
-| **DELETE**| `/transactions/:id`| ADMIN ONLY | Perform soft-delete (Audit Logged) |
-
-**Sample Transaction Entry:**
-```json
-{
-  "amount": 4500.00,
-  "type": "INCOME",
-  "category": "CONSULTING",
-  "notes": "Q1 Project Milestone #4"
-}
-```
-
-### **3. Intelligence Telemetry** 📈
-| Method | Endpoint | Access | Purpose |
-| :--- | :--- | :--- | :--- |
-| **GET** | `/dashboard/analytics`| All | High-level summary metrics & distribution |
-| **GET** | `/transactions?limit=10`| All | Real-time liquidity flow data points |
-
-### **4. Governance Nexus** 🛡️
-| Method | Endpoint | Access | Purpose |
-| :--- | :--- | :--- | :--- |
-| **GET** | `/users` | ADMIN ONLY | View entire organization registry |
-| **PATCH** | `/users/:id` | ADMIN ONLY | Update authority (Role) or Status |
-| **GET** | `/audit` | ADMIN ONLY | Access the immutable security ledger |
+### **4. ⚙️ Access Control & Security**
+*   **Middleware Guard**: Every single request is intercepted by a "Gatekeeper" middleware that checks the user's JWT token and their Role before allowing the action.
+*   **Input Validation**: I use **Zod** to ensure that no "bad data" ever reaches the database. If a field is missing or an amount is negative, the system provides a clear, polite error message.
 
 ---
 
-## **⚡ Environment Configuration**
-
-Create a `.env` in the root and frontend directories:
-
-**Backend (`.env`):**
-```bash
-PORT=5000
-DATABASE_URL="postgresql://user:pass@host:5432/db" # Cloud DB (Postgres)
-JWT_SECRET="enterprise_mainframe_key"
-FRONTEND_URL="https://financex-dashboard.vercel.app"
-```
-
-**Frontend (`frontend/.env`):**
-```bash
-NEXT_PUBLIC_API_URL="http://localhost:5000/api/v1"
-```
+## **🛠️ Tech Stack**
+*   **Frontend**: Next.js 15 & Tailwind CSS (Modern, Responsive UI).
+*   **Backend**: Node.js & Express (Robust, Industry-Standard API).
+*   **Database**: **Prisma ORM** with **PostgreSQL** (Enterprise Persistence).
+*   **Validation**: Zod (Schema-based validation).
+*   **Security**: JWT (Bearer tokens) & Bcryptjs (Password Hashing).
 
 ---
 
-## **🛠️ Local Development Sequence**
+## **⚡ Quick Start (Setup Instructions)**
 
-1.  **Backend Initialization**:
-    ```bash
-    npm install
-    npx prisma generate
-    npx prisma migrate dev
-    npm run dev
-    ```
-2.  **Frontend Initialization**:
-    ```bash
-    cd frontend
-    npm install
-    npm run dev
-    ```
+### **1. Backend Setup**
+1.  Navigate to the root folder: `npm install`
+2.  Set up your `.env` (See `.env.example`).
+3.  Generate the database client: `npx prisma generate`
+4.  Launch the API: `npm run dev`
 
-## **🛡️ Role Matrix (RBAC Authority)**
-
--   **ADMIN**: Global oversight. Modifies users, deletes records, views audit trail.
--   **ANALYST**: Strategic input. Records and modifies financial entries. Cannot delete or manage users.
--   **VIEWER**: Observation only. Access to dashboard telemetry and filtered ledger history.
+### **2. Frontend Setup**
+1.  Navigate to the `/frontend` folder: `npm install`
+2.  Launch the Dashboard: `npm run dev`
 
 ---
 
-**FinanceX v1.5.0** // SECURE_MAIN_TUNNEL: ACTIVE // 🚀💎🛡️🏁🏆
+## **🛡️ Built-in Enhancements (Going Above & Beyond)**
+*   ✅ **JWT Authentication**: Secure sessions for all operatives.
+*   ✅ **Audit Logging**: Every sensitive change is recorded in an immutable compliance ledger.
+*   ✅ **Soft Delete**: Logic to preserve data integrity for auditing.
+*   ✅ **Rate Limiting**: Protection against automated brute-force attacks.
+*   ✅ **Unit Tests**: Mathematical verification of core financial logic via **Vitest**.
+
+---
+**Build Status: STABLE** // **Architecture: LAYERED** // 🚀💎🛡️🏁🏆
